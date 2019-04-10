@@ -86,7 +86,7 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
         pauseResBtn = (ImageButton) findViewById(R.id.pauseResBtn);
-        checkBtn = (ImageButton) findViewById(R.id.checkBtn);
+        //checkBtn = (ImageButton) findViewById(R.id.check);
         finishBtn = (ImageButton) findViewById(R.id.finishBtn);
 
 

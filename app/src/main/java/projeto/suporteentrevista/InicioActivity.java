@@ -18,6 +18,8 @@ public class InicioActivity  extends AppCompatActivity {
     private static final int PERMISSION_ALL = 4;
     private ImageButton newBtn;
 
+//alguns comentarios para testar o git
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

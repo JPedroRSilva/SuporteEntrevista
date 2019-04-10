@@ -18,29 +18,23 @@
 
     <ImageButton
         android:id="@+id/pauseResBtn"
+        android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/todo"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/checkBtn"
-        app:srcCompat="@drawable/pause_50" />
-
-    <ImageButton
-        android:id="@+id/checkBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/finishBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/check_48" />
+        app:srcCompat="@drawable/ic_pause_circle_filled_blue_64dp" />
+
 
     <ImageButton
         android:id="@+id/cameraBtn"
+        android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -48,18 +42,21 @@
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/camera_50" />
+        app:srcCompat="@drawable/ic_camera_blue_64dp" />
 
     <ImageButton
         android:id="@+id/finishBtn"
-        android:layout_width="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_width="76dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
         android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/end_52" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pauseResBtn"
+        app:srcCompat="@drawable/ic_close_blue_64dp" />
 
     <TextView
         android:id="@+id/perguntasText"

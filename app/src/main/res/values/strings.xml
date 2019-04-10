@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SuporteEntrevista</string>
+    <string name="name">Button</string>
+    <string name="come_ar">Começar</string>
+    <string name="nome">Nome</string>
+    <string name="todo">TODO</string>
+    <string name="nova_entrevista">Nova Entrevista</string>
+    <string name="perguntas">Perguntas</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This application needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+</resources>

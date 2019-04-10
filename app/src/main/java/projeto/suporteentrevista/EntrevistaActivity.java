@@ -1,0 +1,277 @@
+package projeto.suporteentrevista;
+
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.coremedia.iso.boxes.Container;
+import com.googlecode.mp4parser.authoring.Movie;
+import com.googlecode.mp4parser.authoring.Track;
+import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
+import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
+import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import projeto.suporteentrevista.Camera.CameraActivity;
+
+public class EntrevistaActivity extends AppCompatActivity {
+
+    String name;
+    File directory;
+    ArrayList<String> perguntas;
+    TextView perguntasView;
+    ImageButton cameraBtn, pauseResBtn, checkBtn, finishBtn;
+    private MediaRecorder audio;
+    private int numberAudio;
+    private String audioFile;
+    private boolean isPaused;
+    ArrayList<String> listAudio;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        isPaused = false;
+        numberAudio = 0;
+
+        listAudio = new ArrayList<>();
+
+        perguntasView = (TextView) findViewById(R.id.perguntasText) ;
+        Intent intent = getIntent();
+
+        name = intent.getStringExtra("Nome");
+        directory = createNewDirectory(name);
+        perguntas = intent.getStringArrayListExtra("Perguntas");
+        int tam = perguntas.size();
+        for(int i = 0; i < tam; i++){
+            perguntasView.append(perguntas.get(i));
+            perguntasView.append("\n");
+        }
+
+        /*----------------Inicializar o audio--------------*/
+        audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
+        prepareAudio(audioFile);
+
+        try {
+            audio.prepare();
+            audio.start();
+            listAudio.add(audioFile);
+        }
+        catch (IllegalStateException ise){
+            Log.i("Audio", "IllegalStateExcetion!");
+            audio.release();
+        }catch(IOException ioe){
+            Log.i("Audio", "IOException!");
+            audio.release();
+        }
+
+        cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
+        pauseResBtn = (ImageButton) findViewById(R.id.pauseResBtn);
+        checkBtn = (ImageButton) findViewById(R.id.checkBtn);
+        finishBtn = (ImageButton) findViewById(R.id.finishBtn);
+
+
+        pauseResBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!isPaused){
+                    Toast.makeText(getApplicationContext(), "Audio Paused", Toast.LENGTH_LONG).show();
+                    audio.stop();
+                    audio.release();
+                    pauseResBtn.setImageResource(R.drawable.resume_50);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Audio resumed", Toast.LENGTH_LONG).show();
+                    numberAudio+=1;
+                    audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
+                    listAudio.add(audioFile);
+                    prepareAudio(audioFile);
+                    try {
+                        audio.prepare();
+                        audio.start();
+                    }
+                    catch (IllegalStateException ise){
+                        Log.i("Audio", "IllegalStateExcetion!");
+                        audio.release();
+                    }catch(IOException ioe){
+                        Log.i("Audio", "IOException!");
+                        audio.release();
+                    }
+
+                    pauseResBtn.setImageResource(R.drawable.pause_50);
+                }
+                isPaused = !isPaused;
+            }
+        });
+
+        finishBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isPaused){
+                    Toast.makeText(getApplicationContext(), "Audio Stoped", Toast.LENGTH_LONG).show();
+                    audio.stop();
+                    audio.release();
+                    audio = null;
+                }
+                String audioFinal = directory.toString()  + "/Audio/audioFinal.mp4";
+                String mergeList[] = new String[listAudio.size()];
+                for(int i = 0; i < listAudio.size(); i++){
+                    mergeList[i] = listAudio.get(i);
+                }
+                mergeMediaFiles(true, mergeList, audioFinal);
+
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(audioFinal);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.release();
+                            Toast.makeText(getApplicationContext(), "Audio finished playing", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (Exception e){
+                    //make something;
+                }
+            }
+        });
+
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentC = new Intent(EntrevistaActivity.this, CameraActivity.class);
+                intentC.setFlags(intentC.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                String diretoriaS = directory.toString();
+                EntrevistaActivity.this.startActivity(intentC);
+                intentC.putExtra("directory", diretoriaS);
+                EntrevistaActivity.this.startActivity(intentC);
+            }
+        });
+    }
+
+    private void prepareAudio(String audioFile) {
+        audio = new MediaRecorder();
+        audio.setAudioSource(MediaRecorder.AudioSource.MIC);
+        audio.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        audio.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        audio.setOutputFile(audioFile);
+    }
+
+    @Override
+    protected void onResume() {
+        if(numberAudio != 0) {
+            numberAudio += 1;
+            audioFile = directory.toString() + "/Audio/" + "audio" + numberAudio + ".3gp";
+            listAudio.add(audioFile);
+            prepareAudio(audioFile);
+            try {
+                audio.prepare();
+                audio.start();
+            } catch (IllegalStateException ise) {
+                Log.i("Audio", "IllegalStateExcetion!");
+                audio.release();
+            } catch (IOException ioe) {
+                Log.i("Audio", "IOException!");
+                audio.release();
+            }
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if(isPaused){
+            Toast.makeText(getApplicationContext(), "Audio Stoped", Toast.LENGTH_LONG).show();
+            audio.stop();
+            audio.release();
+            audio = null;
+        }
+        super.onPause();
+    }
+
+    public File createNewDirectory(String name) {
+        Date date = new Date();
+        String strDateFormat = "yyyy-MM-dd";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        // create a directory before creating a new file inside it.
+        String pathDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+        File directory = new File(pathDir + File.separator + name + "_" + dateFormat.format(date));
+
+        // now creates 2 sub-directories to house photos and audio.
+        if (!directory.exists()) {
+            if(directory.mkdirs()){
+                Log.i("Diretoria", directory.toString());
+            }
+            else {
+                Log.i("Diretoria","Diretoria principal não criada!  " + directory.toString());
+            }
+            File photoDir = new File(directory, "Fotos");
+            File audioDir = new File(directory, "Audio");
+            if(photoDir.mkdirs() && audioDir.mkdirs()){
+                Log.i("Diretoria","Subdiretorias Fotos e Audio criadas");
+            }
+            else{
+                Log.i("Diretoria","Subdiretorias Fotos e Audio não criadas  " + photoDir);
+            }
+        }
+        else{
+            Log.i("Diretoria", "Diretoria já existe!");
+        }
+        return directory;
+    }
+
+    public static boolean mergeMediaFiles(boolean isAudio, String sourceFiles[], String targetFile) {
+        try {
+            String mediaKey = isAudio ? "soun" : "vide";
+            List<Movie> listMovies = new ArrayList<>();
+            for (String filename : sourceFiles) {
+                listMovies.add(MovieCreator.build(filename));
+            }
+            List<Track> listTracks = new LinkedList<>();
+            for (Movie movie : listMovies) {
+                for (Track track : movie.getTracks()) {
+                    if (track.getHandler().equals(mediaKey)) {
+                        listTracks.add(track);
+                    }
+                }
+            }
+            Movie outputMovie = new Movie();
+            if (!listTracks.isEmpty()) {
+                outputMovie.addTrack(new AppendTrack(listTracks.toArray(new Track[listTracks.size()])));
+            }
+            Container container = new DefaultMp4Builder().build(outputMovie);
+            FileChannel fileChannel = new RandomAccessFile(String.format(targetFile), "rw").getChannel();
+            container.writeContainer(fileChannel);
+            fileChannel.close();
+            return true;
+        }
+        catch (IOException e) {
+            Log.e("Merge de audio", "Error merging media files. exception: "+e.getMessage());
+            return false;
+        }
+    }
+}

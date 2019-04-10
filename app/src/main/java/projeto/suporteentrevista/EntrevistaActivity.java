@@ -182,7 +182,7 @@ public class EntrevistaActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(numberAudio != 0) {
+        if(numberAudio != 0 && isPaused) {
             numberAudio += 1;
             audioFile = directory.toString() + "/Audio/" + "audio" + numberAudio + ".3gp";
             listAudio.add(audioFile);
@@ -197,17 +197,19 @@ public class EntrevistaActivity extends AppCompatActivity {
                 Log.i("Audio", "IOException!");
                 audio.release();
             }
+            isPaused = !isPaused;
         }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if(isPaused){
+        if(!isPaused){
             Toast.makeText(getApplicationContext(), "Audio Stoped", Toast.LENGTH_LONG).show();
             audio.stop();
             audio.release();
             audio = null;
+            isPaused = !isPaused;
         }
         super.onPause();
     }

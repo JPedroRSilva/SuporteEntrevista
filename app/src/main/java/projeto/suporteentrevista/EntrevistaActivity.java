@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class EntrevistaActivity extends AppCompatActivity {
     File directory;
     ArrayList<String> perguntas;
     TextView perguntasView;
+    ListView listaView;
     ImageButton cameraBtn, pauseResBtn, checkBtn, finishBtn;
     private MediaRecorder audio;
     private int numberAudio;
@@ -55,17 +58,25 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         listAudio = new ArrayList<>();
 
-        perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         Intent intent = getIntent();
 
         name = intent.getStringExtra("Nome");
         directory = createNewDirectory(name);
+        /***************mostrar perguntas ***********************/
+
+        listaView = (ListView) findViewById(R.id.listaView);
+
+        //perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         perguntas = intent.getStringArrayListExtra("Perguntas");
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked, perguntas);
+        listaView.setAdapter(arrayAdapter);
+        /*
         int tam = perguntas.size();
         for(int i = 0; i < tam; i++){
             perguntasView.append(perguntas.get(i));
             perguntasView.append("\n");
-        }
+        }*/
 
         /*----------------Inicializar o audio--------------*/
         audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
@@ -179,6 +190,8 @@ public class EntrevistaActivity extends AppCompatActivity {
         audio.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         audio.setOutputFile(audioFile);
     }
+
+
 
     @Override
     protected void onResume() {

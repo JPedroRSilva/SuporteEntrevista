@@ -91,7 +91,7 @@ public class PreEntrevistaActivity extends AppCompatActivity {
             }
         });
 
-
+        /**** CAROUSSEL DE PERGUNTAS */
         final MaxHeightRecyclerView rv = (MaxHeightRecyclerView)findViewById(R.id.card_recycler_view);
         final LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -33,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import projeto.suporteentrevista.Camera.CameraActivity;
+import projeto.suporteentrevista.Pergunta.Pergunta;
 
 public class EntrevistaActivity extends AppCompatActivity {
 
@@ -69,8 +71,22 @@ public class EntrevistaActivity extends AppCompatActivity {
         //perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         perguntas = intent.getStringArrayListExtra("Perguntas");
 
+        ArrayList<Pergunta> arrayPerguntas = new ArrayList<Pergunta>();
+
+        for(String p: perguntas){
+            arrayPerguntas.add(new Pergunta(p));
+        }
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked, perguntas);
         listaView.setAdapter(arrayAdapter);
+        listaView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Pergunta m = arrayPerguntas.get(position);
+                m.changeCheck();
+                //Toast.makeText(getApplicationContext(), m.checkT(), Toast.LENGTH_SHORT).show();
+            }
+        });
         /*
         int tam = perguntas.size();
         for(int i = 0; i < tam; i++){
@@ -105,6 +121,8 @@ public class EntrevistaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                pauseResBtn.setEnabled(false);
+
                 if(!isPaused){
                     Toast.makeText(getApplicationContext(), "Audio Paused", Toast.LENGTH_LONG).show();
                     audio.stop();
@@ -132,6 +150,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                     pauseResBtn.setImageResource(R.drawable.pause_50);
                 }
                 isPaused = !isPaused;
+                pauseResBtn.setEnabled(true);
             }
         });
 

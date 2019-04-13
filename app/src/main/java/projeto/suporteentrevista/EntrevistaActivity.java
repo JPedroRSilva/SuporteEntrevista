@@ -135,7 +135,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                     audio.release();
                     chronometer.stop();
                     pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-                    pauseResBtn.setImageResource(R.drawable.resume_50); /////////////////////////////////////////////////////////////////////////
+                    pauseResBtn.setImageResource(R.drawable.ic_play_circle_filled_blue_64dp); /////////////////////////////////////////////////////////////////////////
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Audio resumed", Toast.LENGTH_LONG).show();
@@ -157,7 +157,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                         audio.release();
                     }
 
-                    pauseResBtn.setImageResource(R.drawable.pause_50);////////////////////////////////////////////////////////////////////////////////////////
+                    pauseResBtn.setImageResource(R.drawable.ic_pause_circle_filled_blue_64dp);////////////////////////////////////////////////////////////////////////////////////////
                 }
                 isPaused = !isPaused;
                 pauseResBtn.setEnabled(true);

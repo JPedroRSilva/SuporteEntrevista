@@ -41,9 +41,8 @@ public class EntrevistaActivity extends AppCompatActivity {
     String name;
     File directory;
     ArrayList<String> perguntas;
-    TextView perguntasView;
     ListView listaView;
-    ImageButton cameraBtn, pauseResBtn, checkBtn, finishBtn;
+    ImageButton cameraBtn, pauseResBtn,finishBtn;
     private MediaRecorder audio;
     private int numberAudio;
     private String audioFile;
@@ -113,7 +112,6 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
         pauseResBtn = (ImageButton) findViewById(R.id.pauseResBtn);
-        //checkBtn = (ImageButton) findViewById(R.id.check);
         finishBtn = (ImageButton) findViewById(R.id.finishBtn);
 
 

@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,16 +40,19 @@ import projeto.suporteentrevista.Pergunta.Pergunta;
 
 public class EntrevistaActivity extends AppCompatActivity {
 
-    String name;
-    File directory;
-    ArrayList<String> perguntas;
-    ListView listaView;
-    ImageButton cameraBtn, pauseResBtn,finishBtn;
+    private String name;
+    private File directory;
+    private ArrayList<String> perguntas;
+    private ListView listaView;
+    private ImageButton cameraBtn, pauseResBtn,finishBtn;
+    private Chronometer chronometer;
+    private long pauseOffset;
     private MediaRecorder audio;
     private int numberAudio;
     private String audioFile;
     private boolean isPaused;
-    ArrayList<String> listAudio;
+    private boolean startResume;
+    private ArrayList<String> listAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +68,16 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         name = intent.getStringExtra("Nome");
         directory = createNewDirectory(name);
+
+        /***************Começar o cronometro ***********************/
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+
         /***************mostrar perguntas ***********************/
 
         listaView = (ListView) findViewById(R.id.listaView);
 
-        //perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         perguntas = intent.getStringArrayListExtra("Perguntas");
 
         ArrayList<Pergunta> arrayPerguntas = new ArrayList<Pergunta>();
@@ -83,15 +93,13 @@ public class EntrevistaActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Pergunta m = arrayPerguntas.get(position);
                 m.changeCheck();
-                //Toast.makeText(getApplicationContext(), m.checkT(), Toast.LENGTH_SHORT).show();
+                if(m.isChecked()) {
+                    m.setTime(timeToString(SystemClock.elapsedRealtime() - chronometer.getBase()));
+                }
+                else m.setTime("Pergunta sem tempo");
+
             }
         });
-        /*
-        int tam = perguntas.size();
-        for(int i = 0; i < tam; i++){
-            perguntasView.append(perguntas.get(i));
-            perguntasView.append("\n");
-        }*/
 
         /*----------------Inicializar o audio--------------*/
         audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
@@ -125,6 +133,8 @@ public class EntrevistaActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Audio Paused", Toast.LENGTH_LONG).show();
                     audio.stop();
                     audio.release();
+                    chronometer.stop();
+                    pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
                     pauseResBtn.setImageResource(R.drawable.resume_50);
                 }
                 else{
@@ -133,6 +143,8 @@ public class EntrevistaActivity extends AppCompatActivity {
                     audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
                     listAudio.add(audioFile);
                     prepareAudio(audioFile);
+                    chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+                    chronometer.start();
                     try {
                         audio.prepare();
                         audio.start();
@@ -212,7 +224,8 @@ public class EntrevistaActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(numberAudio != 0 && isPaused) {
+        if(numberAudio != 0 && startResume) {
+            startResume = !startResume;
             numberAudio += 1;
             audioFile = directory.toString() + "/Audio/" + "audio" + numberAudio + ".3gp";
             listAudio.add(audioFile);
@@ -227,7 +240,8 @@ public class EntrevistaActivity extends AppCompatActivity {
                 Log.i("Audio", "IOException!");
                 audio.release();
             }
-            isPaused = !isPaused;
+            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            chronometer.start();
         }
         super.onResume();
     }
@@ -235,11 +249,12 @@ public class EntrevistaActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         if(!isPaused){
-            Toast.makeText(getApplicationContext(), "Audio Stoped", Toast.LENGTH_LONG).show();
             audio.stop();
             audio.release();
             audio = null;
-            isPaused = !isPaused;
+            startResume = true;
+            chronometer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
         }
         super.onPause();
     }
@@ -305,5 +320,15 @@ public class EntrevistaActivity extends AppCompatActivity {
             Log.e("Merge de audio", "Error merging media files. exception: "+e.getMessage());
             return false;
         }
+    }
+
+    private String timeToString(long time){
+        time /= 1000;
+        long hours = time /3600;
+        time -= hours * 3600;
+        long minutes = time/60;
+        time -= minutes * 60;
+        long seconds = time;
+        return String.valueOf(hours + "h:" + minutes + "m:" + seconds + "s");
     }
 }

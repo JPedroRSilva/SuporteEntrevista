@@ -22,24 +22,28 @@
 
     <TextView
         android:id="@+id/resumoTextView"
-        android:layout_width="90dp"
-        android:layout_height="69dp"
+        android:layout_width="281dp"
+        android:layout_height="153dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notasEditText" />
 
     <ImageButton
         android:id="@+id/terminarBtn"
+        android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="63dp"
-        android:layout_marginBottom="182dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/check_48" />
+        app:layout_constraintTop_toBottomOf="@+id/resumoTextView"
+        app:srcCompat="@drawable/ic_done_all_blue_64dp" />
 
 </android.support.constraint.ConstraintLayout>

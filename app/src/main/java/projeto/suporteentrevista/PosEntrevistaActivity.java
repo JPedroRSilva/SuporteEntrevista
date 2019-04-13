@@ -23,5 +23,4 @@ public class PosEntrevistaActivity extends AppCompatActivity {
         notasView = (EditText) findViewById(R.id.notasEditText);
         terminarBtn = (ImageButton) findViewById(R.id.terminarBtn);
     }
-
 }

@@ -17,11 +17,11 @@ public class PosEntrevistaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.posentrevista);
 
         resumoView = (TextView) findViewById(R.id.resumoTextView);
         notasView = (EditText) findViewById(R.id.notasEditText);
         terminarBtn = (ImageButton) findViewById(R.id.terminarBtn);
-
-        preencheResumo()
     }
+
 }

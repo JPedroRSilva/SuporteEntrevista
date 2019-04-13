@@ -1,6 +1,8 @@
 package projeto.suporteentrevista.Pergunta;
 
-public class Pergunta {
+import java.io.Serializable;
+
+public class Pergunta implements Serializable {
 
     private String texto;
     private boolean checked;

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class EntrevistaActivity extends AppCompatActivity {
     private String audioFile;
     private boolean isPaused;
     private boolean startResume;
+    private boolean end;
     private ArrayList<String> listAudio;
 
     @Override
@@ -171,30 +173,20 @@ public class EntrevistaActivity extends AppCompatActivity {
                     audio.stop();
                     audio.release();
                     audio = null;
+                    startResume = true;
                 }
+                end = true;
                 String audioFinal = directory.toString()  + "/Audio/audioFinal.mp4";
                 String mergeList[] = new String[listAudio.size()];
                 for(int i = 0; i < listAudio.size(); i++){
                     mergeList[i] = listAudio.get(i);
                 }
                 mergeMediaFiles(true, mergeList, audioFinal);
-
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(audioFinal);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Toast.makeText(getApplicationContext(), "Playing Audio", Toast.LENGTH_LONG).show();
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mp.release();
-                            Toast.makeText(getApplicationContext(), "Audio finished playing", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } catch (Exception e){
-                    //make something;
-                }
+                Intent finish = new Intent(EntrevistaActivity.this, PosEntrevistaActivity.class);
+                finish.putExtra("arrayListP", arrayPerguntas);
+                finish.putExtra("name", name);
+                finish.putExtra("directory", directory);
+                EntrevistaActivity.this.startActivity(finish);
             }
         });
 
@@ -224,7 +216,8 @@ public class EntrevistaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         if(numberAudio != 0 && startResume) {
-            startResume = !startResume;
+            Toast.makeText(getApplicationContext(), "Audio resumido", Toast.LENGTH_SHORT).show();
+            startResume = false;
             numberAudio += 1;
             audioFile = directory.toString() + "/Audio/" + "audio" + numberAudio + ".3gp";
             listAudio.add(audioFile);
@@ -242,12 +235,13 @@ public class EntrevistaActivity extends AppCompatActivity {
             chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
         }
+        end = false;
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if(!isPaused){
+        if(!isPaused && !end){
             audio.stop();
             audio.release();
             audio = null;

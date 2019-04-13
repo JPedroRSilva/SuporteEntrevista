@@ -41,7 +41,7 @@ public class PreEntrevistaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preentrevista);
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 
         /***************atualizar as perguntas********************/
@@ -91,7 +91,7 @@ public class PreEntrevistaActivity extends AppCompatActivity {
             }
         });
 
-
+        /**** CAROUSSEL DE PERGUNTAS */
         final MaxHeightRecyclerView rv = (MaxHeightRecyclerView)findViewById(R.id.card_recycler_view);
         final LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);

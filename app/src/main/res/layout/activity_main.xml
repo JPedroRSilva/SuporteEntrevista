@@ -44,6 +44,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_camera_blue_64dp" />
 
+
     <ImageButton
         android:id="@+id/finishBtn"
         android:background="@android:color/transparent"
@@ -58,20 +59,20 @@
         app:layout_constraintStart_toEndOf="@+id/pauseResBtn"
         app:srcCompat="@drawable/ic_close_blue_64dp" />
 
-    <TextView
-        android:id="@+id/perguntasText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/perguntas"
-        android:padding="120dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="104dp"
+        android:layout_marginBottom="100dp">
+
+        <ListView
+            android:id="@+id/listaView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:choiceMode="multipleChoice"/>
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +34,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import projeto.suporteentrevista.Camera.CameraActivity;
+import projeto.suporteentrevista.Pergunta.Pergunta;
 
 public class EntrevistaActivity extends AppCompatActivity {
 
     String name;
     File directory;
     ArrayList<String> perguntas;
-    TextView perguntasView;
-    ImageButton cameraBtn, pauseResBtn, checkBtn, finishBtn;
+    ListView listaView;
+    ImageButton cameraBtn, pauseResBtn,finishBtn;
     private MediaRecorder audio;
     private int numberAudio;
     private String audioFile;
@@ -55,17 +59,39 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         listAudio = new ArrayList<>();
 
-        perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         Intent intent = getIntent();
 
         name = intent.getStringExtra("Nome");
         directory = createNewDirectory(name);
+        /***************mostrar perguntas ***********************/
+
+        listaView = (ListView) findViewById(R.id.listaView);
+
+        //perguntasView = (TextView) findViewById(R.id.perguntasText) ;
         perguntas = intent.getStringArrayListExtra("Perguntas");
+
+        ArrayList<Pergunta> arrayPerguntas = new ArrayList<Pergunta>();
+
+        for(String p: perguntas){
+            arrayPerguntas.add(new Pergunta(p));
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked, perguntas);
+        listaView.setAdapter(arrayAdapter);
+        listaView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Pergunta m = arrayPerguntas.get(position);
+                m.changeCheck();
+                //Toast.makeText(getApplicationContext(), m.checkT(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        /*
         int tam = perguntas.size();
         for(int i = 0; i < tam; i++){
             perguntasView.append(perguntas.get(i));
             perguntasView.append("\n");
-        }
+        }*/
 
         /*----------------Inicializar o audio--------------*/
         audioFile = directory.toString()  + "/Audio/" + "audio" + numberAudio + ".3gp";
@@ -86,13 +112,14 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         cameraBtn = (ImageButton) findViewById(R.id.cameraBtn);
         pauseResBtn = (ImageButton) findViewById(R.id.pauseResBtn);
-        //checkBtn = (ImageButton) findViewById(R.id.check);
         finishBtn = (ImageButton) findViewById(R.id.finishBtn);
 
 
         pauseResBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                pauseResBtn.setEnabled(false);
 
                 if(!isPaused){
                     Toast.makeText(getApplicationContext(), "Audio Paused", Toast.LENGTH_LONG).show();
@@ -121,6 +148,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                     pauseResBtn.setImageResource(R.drawable.pause_50);
                 }
                 isPaused = !isPaused;
+                pauseResBtn.setEnabled(true);
             }
         });
 
@@ -179,6 +207,8 @@ public class EntrevistaActivity extends AppCompatActivity {
         audio.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         audio.setOutputFile(audioFile);
     }
+
+
 
     @Override
     protected void onResume() {

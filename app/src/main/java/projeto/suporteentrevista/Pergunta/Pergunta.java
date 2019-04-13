@@ -43,11 +43,6 @@ public class Pergunta {
         return checked;
     }
 
-    public String checkT(){
-        if(this.checked) return "true";
-        return "false";
-    }
-
     public void changeCheck(){
         this.checked = !this.checked;
     }

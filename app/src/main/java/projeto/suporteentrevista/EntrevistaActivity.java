@@ -215,7 +215,7 @@ public class EntrevistaActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(numberAudio != 0 && startResume) {
+        if(startResume) {
             Toast.makeText(getApplicationContext(), "Audio resumido", Toast.LENGTH_SHORT).show();
             startResume = false;
             numberAudio += 1;
@@ -249,6 +249,7 @@ public class EntrevistaActivity extends AppCompatActivity {
             chronometer.stop();
             pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
         }
+        end = false;
         super.onPause();
     }
 

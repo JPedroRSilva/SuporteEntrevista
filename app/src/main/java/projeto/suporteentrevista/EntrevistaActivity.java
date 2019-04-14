@@ -185,7 +185,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                 Intent finish = new Intent(EntrevistaActivity.this, PosEntrevistaActivity.class);
                 finish.putExtra("arrayListP", arrayPerguntas);
                 finish.putExtra("name", name);
-                finish.putExtra("directory", directory);
+                finish.putExtra("directory", directory.toString());
                 EntrevistaActivity.this.startActivity(finish);
             }
         });

@@ -42,16 +42,16 @@
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_camera_blue_64dp" />
+        app:srcCompat="@drawable/ic_photo_camera_blue_64dp" />
 
 
     <ImageButton
         android:id="@+id/finishBtn"
-        android:background="@android:color/transparent"
         android:layout_width="76dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="32dp"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,8 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
-            android:choiceMode="multipleChoice"/>
+            android:layout_marginTop="4dp"
+            android:choiceMode="multipleChoice" />
     </RelativeLayout>
 
 

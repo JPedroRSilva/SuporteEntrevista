@@ -150,19 +150,17 @@ public class PreEntrevistaActivity extends AppCompatActivity {
 
     private void generateModelList() {
 
-        /***********************************************************************/
-        String nome = "á éááá áááàó õ";
+        String[] pe1 = {"Como se chama o seu marido?",
+                "Onde viveu a infancia? Onde estudou?",
+                "E viveu no estrangeiro?",
+                "Qual foi o seu primeiro emprego?",
+                "YOLO porque também é importante"
+        };
 
-        /***********************************************************************/
-        modelList.add(new Model("cenas 1fixes uma pergunta um pouco mais longa para ver como é que fica"));
+        for(String p: pe1){
+            modelList.add(new Model(p));
+        }
 
-        modelList.add(new Model("cenas 2fixes",false));
-
-        modelList.add(new Model("cenas 3fixes"));
-
-        modelList.add(new Model("cenas 4fixes"));
-
-        modelList.add(new Model("SWAG"));
     }
 
     public static String unaccent(String src) {

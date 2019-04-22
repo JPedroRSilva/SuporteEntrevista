@@ -60,7 +60,8 @@ public class ZipUtils {
             ex.printStackTrace();
         } finally {
             try {
-                zos.close();
+                if (zos != null)
+                    zos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

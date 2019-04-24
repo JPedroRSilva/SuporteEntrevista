@@ -45,9 +45,10 @@ public class PosEntrevistaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 terminarBtn.setEnabled(false);
-                ZipUtils zip = new ZipUtils(name + ".zip", directoria.toString());
+                String fileZip = directoria.toString() + ".zip";
+                ZipUtils zip = new ZipUtils(fileZip, directoria.toString());
                 zip.generateFileList(new File(directoria.toString()));
-                zip.zipIt(name + ".zip");
+                zip.zipIt(fileZip);
             }
         });
     }

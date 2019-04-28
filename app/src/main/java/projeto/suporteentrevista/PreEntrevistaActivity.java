@@ -85,8 +85,9 @@ public class PreEntrevistaActivity extends AppCompatActivity {
                 //Toast.makeText(getBaseContext(), nomeProcessado, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(PreEntrevistaActivity.this, EntrevistaActivity.class);
-                intent.putStringArrayListExtra("Perguntas", perguntas);
-                intent.putExtra("Nome", nomeProcessado.toString());
+                intent.putExtra("nameNP", nome);
+                intent.putStringArrayListExtra("perguntas", perguntas);
+                intent.putExtra("name", nomeProcessado.toString());
                 PreEntrevistaActivity.this.startActivity(intent);
             }
         });

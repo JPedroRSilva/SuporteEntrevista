@@ -41,7 +41,7 @@ import projeto.suporteentrevista.Pergunta.Pergunta;
 
 public class EntrevistaActivity extends AppCompatActivity {
 
-    private String name;
+    private String name, nameNP;
     private File directory;
     private ArrayList<String> perguntas;
     private ListView listaView;
@@ -68,7 +68,8 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        name = intent.getStringExtra("Nome");
+        name = intent.getStringExtra("name");
+        nameNP = intent.getStringExtra("nameNP");
         directory = createNewDirectory(name);
 
         /***************Começar o cronometro ***********************/
@@ -80,7 +81,7 @@ public class EntrevistaActivity extends AppCompatActivity {
 
         listaView = (ListView) findViewById(R.id.listaView);
 
-        perguntas = intent.getStringArrayListExtra("Perguntas");
+        perguntas = intent.getStringArrayListExtra("perguntas");
 
         ArrayList<Pergunta> arrayPerguntas = new ArrayList<Pergunta>();
 
@@ -185,6 +186,7 @@ public class EntrevistaActivity extends AppCompatActivity {
                 Intent finish = new Intent(EntrevistaActivity.this, PosEntrevistaActivity.class);
                 finish.putExtra("arrayListP", arrayPerguntas);
                 finish.putExtra("name", name);
+                finish.putExtra("nameNP", nameNP);
                 finish.putExtra("directory", directory.toString());
                 EntrevistaActivity.this.startActivity(finish);
             }

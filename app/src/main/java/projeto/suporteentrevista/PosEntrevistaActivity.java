@@ -81,7 +81,7 @@ public class PosEntrevistaActivity extends AppCompatActivity {
 
         try{
             writer = new FileWriter(new File(directoria.toString() + File.separator + "Notas" + ".txt"));
-            Editable Snotas = notasView.getText();
+            String snotas = notasView.getText().toString();
             writer.write(String.format("Nome do entrevistado: %s\n", nameNP));
             writer.write("Nome do entrevistador: *A preencher*\n");
             Date date = new Date();
@@ -89,7 +89,8 @@ public class PosEntrevistaActivity extends AppCompatActivity {
             DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
             writer.write(String.format("Data da entrevista: %s\n",dateFormat.format(date)));
             writer.write("Notas a relembrar dadas pelo entrevistador: \n");
-            writer.write(Snotas.toString());
+            writer.write(snotas);
+            writer.close();
         }
         catch (java.io.IOException e){
             e.printStackTrace();

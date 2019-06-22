@@ -137,25 +137,18 @@ public class PreEntrevistaActivity extends AppCompatActivity {
         view.animate().alpha(isShow ? 1f:0f).setDuration(100).setInterpolator(new DecelerateInterpolator());
     }
 
-    /*
-    private void generateModelList() {
-        modelList.add(new Model("https://www.almadeviajante.com/wp-content/uploads/riad-marraquexe-farhan-750x420.jpg","cenas 1fixes uma pergunta um pouco mais longa para ver como é que fica"));
-
-        modelList.add(new Model("https://www.almadeviajante.com/wp-content/uploads/riad-marraquexe-farhan-750x420.jpg","cenas 2fixes"));
-
-        modelList.add(new Model("https://www.almadeviajante.com/wp-content/uploads/riad-marraquexe-farhan-750x420.jpg","cenas 3fixes"));
-
-        modelList.add(new Model("https://www.almadeviajante.com/wp-content/uploads/riad-marraquexe-farhan-750x420.jpg","cenas 4fixes"));
-    }
-    */
-
     private void generateModelList() {
 
-        String[] pe1 = {"Como se chama o seu marido?",
-                "Onde viveu a infancia? Onde estudou?",
-                "E viveu no estrangeiro?",
-                "Qual foi o seu primeiro emprego?",
-                "YOLO porque também é importante"
+        String[] pe1 = {"Qual o seu nome? Tem alguma alcunha?",
+                "Qual a data de nascimento?",
+                "Onde nasceu?",
+                "Como foi a sua infância?",
+                "E casado ou tem filhos?",
+                "Qual o seu percurso académico?",
+                "Qual a sua área profissional?",
+                "Lembra-se de alguma situação caricata pela qual passou?",
+                "Mantém alguma tradição transmitida pelos seus pais?",
+                "Como se vê num futuro próximo?"
         };
 
         for(String p: pe1){

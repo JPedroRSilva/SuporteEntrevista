@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,6 +34,7 @@ public class PosEntrevistaActivity extends AppCompatActivity {
         setContentView(R.layout.posentrevista);
 
         resumoView = (TextView) findViewById(R.id.resumoTextView);
+        resumoView.setMovementMethod(new ScrollingMovementMethod());
         notasView = (EditText) findViewById(R.id.notasEditText);
         terminarBtn = (ImageButton) findViewById(R.id.terminarBtn);
 
